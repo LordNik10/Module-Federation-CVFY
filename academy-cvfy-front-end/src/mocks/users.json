@@ -1,0 +1,50 @@
+{
+  "gianluca.larosa@bitrock.it": {
+    "firstname": "Gianluca",
+    "lastname": "La Rosa",
+    "username": "gianluca.larosa@bitrock.it",
+    "email": "gianluca.larosa@bitrock.it",
+    "role": "hr",
+    "password": "admin"
+  },
+  "marika.fabiani@bitrock.it": {
+    "firstname": "Marika",
+    "lastname": "Fabiani",
+    "username": "marika.fabiani@bitrock.it",
+    "email": "marika.fabiani@bitrock.it",
+    "role": "dev",
+    "password": "admin"
+  },
+  "niccolo.naso@bitrock.it": {
+    "firstname": "Niccolò",
+    "lastname": "Naso",
+    "username": "niccolo.naso@bitrock.it",
+    "email": "niccolo.naso@bitrock.it",
+    "role": "dev",
+    "password": "admin"
+  },
+  "daniel.zotti@bitrock.it": {
+    "firstname": "Daniel",
+    "lastname": "Zotti",
+    "username": "daniel.zotti@bitrock.it",
+    "email": "daniel.zotti@bitrock.it",
+    "role": "hr",
+    "password": "admin"
+  },
+  "yi.zhang@bitrock.it": {
+    "firstname": "Yi",
+    "lastname": "Zhang",
+    "username": "yi.zhang@bitrock.it",
+    "email": "yi.zhang@bitrock.it",
+    "role": "hr",
+    "password": "admin"
+  },
+  "federico.muzzo@bitrock.it": {
+    "firstname": "Federico",
+    "lastname": "Muzzo",
+    "username": "federico.muzzo@bitrock.it",
+    "email": "federico.muzzo@bitrock.it",
+    "role": "dev",
+    "password": "admin"
+  }
+}

@@ -1,0 +1,942 @@
+swagger: "2.0"
+info:
+  description: "Endpoint's API Cvfy project"
+  version: "1.0.0"
+  title: "Cvfy endpoint's API"
+
+basePath: "/"
+tags:
+  - name: "Cvfy endpoints"
+    description: "Cvfy endpoints"
+
+schemes:
+  - "https"
+  - "http"
+paths:
+  /login:
+    post:
+      tags:
+        - "login"
+      summary: "Login access point"
+      operationId: "login"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "UsernamePasswordDTO object that grants access to the program"
+          required: true
+          schema:
+            $ref: "#/definitions/UsernamePassword"
+      responses:
+        "201":
+          description: "Successful login"
+          schema:
+            $ref: "#/definitions/UsernameRoleToken"
+        "401":
+          description: "Invalid input"
+        "500":
+          description: "Internal server error"
+  /logout:
+    get:
+      tags:
+        - "logout"
+      summary: "Logout endpoint"
+      operationId: "logout"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Get account token for logout process"
+          required: true
+      responses:
+        "200":
+          description: "You are successful logout"
+        "401":
+          description: "Invalid token"
+        "500":
+          description: "Internal server error"
+  /skills:
+    get:
+      tags:
+        - "skills"
+      summary: "Skills endpoint"
+      description: "Get all the skills"
+      operationId: "getAllSkill"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Skill"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal server error"
+  /skills-paged:
+    get:
+      tags:
+        - "skills paged"
+      summary: "Skills endpoint paginate"
+      description: "Get all the skills"
+      operationId: "getAllSkillPaged"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "page"
+          in: "query"
+          description: "All paginate endpoint"
+          required: true
+          type: "string"
+          default: 0
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            allOf:
+              - type: "object"
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: "#/definitions/Skill"
+              - $ref: "#/definitions/PageResult"
+        "401":
+          description: "Unauthorized"
+        "400":
+          description: "Bad request"
+        "500":
+          description: "Internal server error"
+
+  /skills/search:
+    get:
+      tags:
+        - "skills"
+      summary: "Skills filtering endpoint"
+      description: "Skill name to filter the list"
+      operationId: "getSkillByName"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+        - name: "name"
+          in: "query"
+          description: "Name of the skill that filters the list"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Skill"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal server error"
+  /skills/add:
+    post:
+      tags:
+        - "skills"
+      summary: "Save new skill"
+      description: "Skill name to save to the database"
+      operationId: "addSkill"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+        - in: "body"
+          name: "body"
+          description: "SkillPostDto object "
+          required: true
+          schema:
+            $ref: "#/definitions/SkillPostDto"
+      responses:
+        "200":
+          description: "Successful operation"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "409":
+          description: "Skill already present"
+        "500":
+          description: "Internal server error"
+  /skills/delete:
+    post:
+      tags:
+        - "skills"
+      summary: "Delete a skill"
+      description: "Skill id to be deleted"
+      operationId: "deleteSkill"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+        - in: "body"
+          name: "body"
+          description: "SkillDeletePostDto object "
+          required: true
+          schema:
+            $ref: "#/definitions/SkillDeletePostDto"
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+        "401":
+          description: ""
+        "404":
+          description: ""
+        "409":
+          description: ""
+        "500":
+          description: ""
+  /me:
+    get:
+      tags:
+        - "account utility"
+      summary: "Me endpoint"
+      description: "Check if account token is not yed expired"
+      operationId: "me"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Check token for validation"
+          required: true
+      responses:
+        "200":
+          description: "Valid token"
+          schema:
+            $ref: "#/definitions/MeResponse"
+        "401":
+          description: "Invalid token"
+        "500":
+          description: "Internal server error"
+  /curriculum/:
+    get:
+      tags:
+        - "curriculum"
+      summary: "curriculum paginate endpoint"
+      description: "List of Curriculum Paginate"
+      operationId: "getCurriculumPage"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "page"
+          in: "query"
+          description: "All curriculum Paginate"
+          required: true
+          type: "string"
+          default: 0
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            allOf:
+              - type: "object"
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: "#/definitions/Curriculum"
+              - $ref: "#/definitions/PageResult"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal server error"
+  /curriculum-list-by-username:
+    post:
+      tags:
+        - "curriculum"
+      summary: "list of curriculum by username"
+      description: "Retrieves the list of curriculum associated to the given username. Results are ordered in increasing upload date"
+      operationId: "getCurriculumListById"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+        - in: "body"
+          name: "body"
+          description: "CurriculumListByUsernameFilter object"
+          required: true
+          schema:
+            $ref: "#/definitions/CurriculumListByUsernameFilter"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CurriculumEmptyAccount"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal server error"
+  /curriculum-search/:
+    post:
+      tags:
+        - "curriculum"
+      summary: "curriculum paginate endpoint"
+      description: "List of Curriculum Filtered Paginate"
+      operationId: "getCurriculumFilteredAndPaginate"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+        - in: "body"
+          name: "body"
+          description: "CurriculumFilter object "
+          required: true
+          schema:
+            $ref: "#/definitions/CurriculumFilter"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            allOf:
+              - type: "object"
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: "#/definitions/Curriculum"
+              - $ref: "#/definitions/PageResult"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal server error"
+  /curriculum/add:
+    post:
+      tags:
+        - "curriculum"
+      summary: "Saves a curriculum"
+      description: "Saves a curriculum with the given account and status"
+      operationId: "addCurriculum"
+      produces:
+        - "application/json"
+      consumes:
+        - "multipart/form-data"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "User token that grants accessing program feature"
+          required: true
+        - in: formData
+          name: "accountId"
+          type: "integer"
+          required: true
+        - in: formData
+          name: "statusId"
+          type: "integer"
+          required: true
+        - in: formData
+          name: "name"
+          type: "string"
+          required: true
+        - in: formData
+          name: "surname"
+          type: "string"
+          required: true
+        - in: formData
+          name: "skillsIds"
+          type: "array"
+          items:
+            type: "integer"
+          required: true
+        - in: formData
+          name: "file"
+          description: "The curriculum file to upload"
+          type: file
+          required: true
+          x-mimetype: application/pdf, application/doc, application/docx
+      responses:
+        "200":
+          description: "Successful operation"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "404":
+          description: "Resource not found"
+        "500":
+          description: "Internal server error"
+  /curriculum/update:
+    post:
+      tags:
+        - "curriculum"
+      summary: "Update curriculum"
+      description: "Update curriculum details: account, skills, status and file"
+      operationId: "updateCurriculum"
+      consumes:
+        - "multipart/form-data"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "User token that grants accessing program feature"
+          required: true
+        - in: formData
+          name: "curriculumId"
+          type: "integer"
+          required: true
+        - in: formData
+          name: "accountId"
+          type: "integer"
+          required: false
+        - in: formData
+          name: "skillsIds"
+          type: "array"
+          items:
+            type: "integer"
+          required: false
+        - in: formData
+          name: "statusId"
+          type: "integer"
+          required: false
+        - in: formData
+          name: "file"
+          description: "The curriculum file to upload"
+          type: file
+          required: false
+          x-mimetype: application/pdf, application/doc, application/docx
+      responses:
+        "200":
+          description: "Successful operation"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "404":
+          description: "Resource not found"
+        "500":
+          description: "Internal server error"
+  /curriculum-status:
+    get:
+      tags:
+        - "curriculum"
+      summary: "Curricula status"
+      description: "Get all curricula status available"
+      operationId: "getAllCurriculumStatus"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "User token that grants accessing program feature"
+          required: true
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CurriculumStatus"
+        "401":
+          description: "Unauthorized user"
+        "500":
+          description: "Internal server error"
+  /roles:
+    get:
+      tags:
+        - "roles"
+      summary: "Roles endpoint"
+      description: "Get all the roles"
+      operationId: "getRoles"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Role"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal server error"
+  /account/:
+    post:
+      tags:
+        - "account"
+      summary: "account endpoint"
+      description: "List of Account Paginate"
+      operationId: "getAccountList"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "page"
+          in: "query"
+          description: "All Account paginate"
+          required: true
+          type: "string"
+          default: 0
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            allOf:
+              - type: "object"
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: "#/definitions/AccountListInformation"
+              - $ref: "#/definitions/PageResult"
+
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal server error"
+  /account/delete:
+    post:
+      tags:
+        - "account"
+      summary: "Account delete endpoint"
+      description: "Delete Account"
+      operationId: "deleteAccount"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+        - in: "body"
+          name: "body"
+          description: "AccountId"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "integer"
+                format: "int64"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "409":
+          description: "Conflict"
+        "500":
+          description: "Internal server error"
+  /account/add:
+    post:
+      tags:
+        - "account"
+      summary: "Add new account"
+      description: "Account to save to the database"
+      operationId: "addAccount"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+        - in: "body"
+          name: "body"
+          description: "Account object "
+          required: true
+          schema:
+            $ref: "#/definitions/AccountCreationInformation"
+      responses:
+        "200":
+          description: "Successful operation"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "409":
+          description: "Account already present"
+        "500":
+          description: "Internal server error"
+  /account/update:
+    post:
+      tags:
+        - "account"
+      summary: "Update account"
+      description: "Update account details: username, email, password and role"
+      operationId: "updateAccount"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Token"
+          type: "string"
+          description: "Use token for request validation"
+          required: true
+        - in: "body"
+          name: "body"
+          description: "Account user details to update"
+          required: true
+          schema:
+            $ref: "#/definitions/AccountUserDetails"
+      responses:
+        "200":
+          description: "Successful operation"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "404":
+          description: "Resource not found"
+        "500":
+          description: "Internal server error"
+definitions:
+  UsernamePassword:
+    type: "object"
+    required:
+      - "username"
+      - "password"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+
+  UsernameRoleToken:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      role:
+        type: "string"
+      token:
+        type: "string"
+      tokenExpirationDate:
+        type: "string"
+        format: "date-time"
+        description: "Expiration date and time"
+        example: "2022-07-15T10:37:31.607811"
+  Skill:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+  AccountUserDetails:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      username:
+        type: "string"
+        format: email
+        example: user@bitrock.com
+      email:
+        type: "string"
+        format: email
+        example: user@bitrock.com
+      password:
+        type: "string"
+        description: "Minimum eight characters, at least one letter and one number"
+      roleId:
+        type: "integer"
+        format: "int64"
+  AccountCreationInformation:
+    type: "object"
+    properties:
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      username:
+        type: "string"
+        format: email
+        example: user@bitrock.com
+      email:
+        type: "string"
+        format: email
+        example: user@bitrock.com
+      password:
+        type: "string"
+        description: "Minimum eight characters, at least one letter and one number"
+      roleId:
+        type: "integer"
+        format: "int64"
+
+  MeResponse:
+    type: "object"
+    properties:
+      id:
+        type: "number"
+      username:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      role:
+        type: "string"
+      token:
+        type: "string"
+      tokenExpirationDate:
+        type: "string"
+        format: "date-time"
+        description: "Expiration date and time"
+        example: "2022-07-15T10:37:31.607811"
+  AccountListInformation:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+        format: email
+        example: user@bitrock.com
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+        format: email
+        example: user@bitrock.com
+      role:
+        type: "object"
+        $ref: "#/definitions/Role"
+      lastLogin:
+        type: "string"
+        format: "datetime"
+        example: "dd-MM-yyyy HH:MM:SS"
+
+  Curriculum:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      surname:
+        type: "string"
+      file:
+        type: "string"
+      uploadDate:
+        type: "string"
+        format: "date-time"
+        description: "Expiration date and time"
+        example: "2022-07-15T10:37:31.607811"
+      status:
+        type: "string"
+      skills:
+        type: "array"
+        items:
+          $ref: "#/definitions/Skill"
+      account:
+        type: "object"
+        properties:
+          name:
+            type: "string"
+          surname:
+            type: "string"
+          role:
+            type: "string"
+
+  CurriculumEmptyAccount:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      surname:
+        type: "string"
+      file:
+        type: "string"
+      uploadDate:
+        type: "string"
+        format: "date-time"
+        description: "Expiration date and time"
+        example: "2022-07-15T10:37:31.607811"
+      status:
+        type: "string"
+      skills:
+        type: "array"
+        items:
+          $ref: "#/definitions/Skill"
+      account:
+        type: "string"
+        example: null
+
+  CurriculumStatus:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+
+  CurriculumFilter:
+    type: "object"
+    properties:
+      page:
+        type: "integer"
+        format: "int32"
+      statusId:
+        type: "integer"
+        format: "int64"
+      skillsId:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int64"
+      dateFrom:
+        type: "string"
+        format: "date"
+        example: "01-01-2020"
+      dateTo:
+        type: "string"
+        format: "date"
+        example: "01-01-2022"
+  CurriculumListByUsernameFilter:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+
+  SkillPostDto:
+    type: "object"
+    required:
+      - "description"
+    properties:
+      description:
+        type: "string"
+
+  SkillDeletePostDto:
+    type: "object"
+    required:
+      - "skillId"
+    properties:
+      skillId:
+        type: "string"
+
+  PageResult:
+    type: "object"
+    properties:
+      pageble:
+        type: "object"
+        properties:
+          sort:
+            type: "object"
+            properties:
+              empty:
+                type: "boolean"
+              sorted:
+                type: "boolean"
+              unsorted:
+                type: "boolean"
+          offset:
+            type: "integer"
+            format: "int32"
+          pageNumber:
+            type: "integer"
+            format: "int32"
+          pageSize:
+            type: "integer"
+            format: "int32"
+          paged:
+            type: "boolean"
+          unpaged:
+            type: "boolean"
+      totalPages:
+        type: "integer"
+        format: "int32"
+      totalElements:
+        type: "integer"
+        format: "int32"
+  Role:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
