@@ -65,9 +65,9 @@ module.exports = (env, argv) => {
       new ModuleFederationPlugin({
         name: "container",
         remotes: {
-          app1: process.env.DEV_APP1,
-          app2: process.env.DEV_APP2,
-          cvfy: process.env.DEV_CVFY,
+          app1: "app1@http://localhost:3001/remoteEntry.js",
+          // app2: process.env.DEV_APP2,
+          cvfy: "cvfy@http://localhost:3003/remoteEntry.js",
         },
         shared: {
           ...deps,
