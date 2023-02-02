@@ -17,3 +17,9 @@ declare module "cvfy/AppBar" {
 
   export default AppBar;
 }
+
+declare module "cvfy/AppDue" {
+  const AppDue: React.ComponentType;
+
+  export default AppDue;
+}

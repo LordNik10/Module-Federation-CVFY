@@ -3,9 +3,9 @@ import React from "react";
 
 // const CounterAppOne = React.lazy(() => import("app1/CounterAppOne"));
 // const CounterAppTwo = React.lazy(() => import("app2/CounterAppTwo"));
-// const AppDue = React.lazy(() => import("cvfy/AppDue"));
-const Loader = React.lazy(() => import("cvfy/Loader"));
+const AppDue = React.lazy(() => import("cvfy/AppDue"));
 
+// const Loader = React.lazy(() => import("cvfy/Loader"));
 // const AppBar = React.lazy(() => import("cvfy/AppBar"));
 
 const App = () => (
@@ -14,7 +14,7 @@ const App = () => (
       <AppBar />
     </React.Suspense> */}
     <React.Suspense fallback={<Spinner size="xl" />}>
-      <Loader />
+      <AppDue />
     </React.Suspense>
   </>
 );
